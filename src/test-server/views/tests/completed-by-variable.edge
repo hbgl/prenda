@@ -1,0 +1,10 @@
+@layout('layouts/master')
+
+@section('body')
+  <h1>Test - wait for variable</h1>
+  <script>
+    setTimeout(() => {
+      window.renderDoneVar = true;
+    }, 500);
+  </script>
+@end

@@ -1,0 +1,24 @@
+# Prenda configuration file.
+
+app:
+  port: 8585
+  host: localhost
+  logLevel: info
+# browser:
+#   provider:
+#     type: internal
+#     debuggingPort1: 9222
+#     debuggingPort2: 9223
+#     recycleDrainMillis: 60000
+#     autoRecycleEnabled: true
+#     autoRecycleAfterUptimeMillis: 1800000
+#     autoRecycleRetryAfterMillis: 10000
+#   width: 1920
+#   height: 1080
+# render:
+#   pageLoadTimeoutMillis: 10000
+#   allowPartiaLoad: false
+#   freshBrowserContext: false
+#   completionTrigger:
+#     type: requests
+#     waitAfterLastRequestMillis: 2000

@@ -1,0 +1,21 @@
+@layout('layouts/master')
+
+@section('body')
+  <h1>Test - modals</h1>
+  <script>
+    confirm('1 - Confirm');
+    confirm('2 - Confirm');
+    confirm('3 - Confirm');
+    alert('4 - Alert');
+    alert('5 - Alert');
+    confirm('6 - Confirm');
+    prompt('7 - Prompt');
+    alert('8 - Alert');
+    prompt('9 - Prompt');
+    prompt('10 - Prompt');
+    const p = document.createElement('p');
+    p.innerText = 'Done';
+    document.body.appendChild(p);
+    window.renderDoneVar = true;
+  </script>
+@end

@@ -1,0 +1,12 @@
+@layout('layouts/master')
+
+@section('body')
+  <h1>Hello from inside the iframe.</h1>
+  <script>
+    setInterval(() => {
+      const url = new URL(document.location.href);
+      url.searchParams.set('q', Date.now());
+      fetch(url.toString()).catch(() => {});
+    }, 500);
+  </script>
+@end

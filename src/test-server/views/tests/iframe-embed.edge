@@ -1,0 +1,12 @@
+@layout('layouts/master')
+
+@section('body')
+  <h1>Hello from inside the iframe.</h1>
+  <script>
+    // This next line should not count as a completion trigger
+    // because it is inside an iframe.
+    window.renderDoneVar = true;
+    
+    window.top.postMessage('ok');
+  </script>
+@end

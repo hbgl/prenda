@@ -1,0 +1,14 @@
+@layout('layouts/master')
+
+@section('body')
+  <h1>Test - deterministic event</h1>
+  <p id="content">1</p>
+  <script>
+    setTimeout(() => {
+      const p = document.getElementById('content');
+      p.innerHTML = '2';
+      window.dispatchEvent(new Event('renderDoneEvent'));
+      p.innerHTML = '3';
+    }, 500);
+  </script>
+@end

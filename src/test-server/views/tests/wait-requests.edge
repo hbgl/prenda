@@ -1,0 +1,20 @@
+@layout('layouts/master')
+
+@section('body')
+  <h1>Test - wait for requests</h1>
+  <img src="/assets/smiley.png">
+  <img src="/assets/circle.png">
+  <script>
+    setTimeout(() => {
+        const img = document.createElement('img');
+        img.src = '/assets/square.png';
+        document.body.appendChild(img);
+    }, 100);
+
+    setTimeout(() => {
+        const img = document.createElement('img');
+        img.src = '/assets/triangle.png';
+        document.body.appendChild(img);
+    }, 200);
+  </script>
+@end

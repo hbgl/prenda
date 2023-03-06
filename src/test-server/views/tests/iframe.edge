@@ -1,0 +1,22 @@
+@layout('layouts/master')
+
+@section('body')
+  <h1>IFrame</h1>
+  <p id="content">1</p>
+  <script>
+    window.addEventListener('message', event => {
+      if (event.origin !== document.location.origin || event.data !== 'ok') {
+        return;
+      }
+      document.getElementById('content').innerHTML = '2';
+      window.renderDoneVar = true;
+    });
+  </script>
+  <iframe
+    id="embed"
+    title="Embed"
+    width="600"
+    height="400"
+    src="/tests/iframe-embed">
+  </iframe>
+@end

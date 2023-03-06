@@ -1,0 +1,8 @@
+@layout('layouts/master')
+
+@section('body')
+  <h1>Test - synchronous event</h1>
+  <p>1</p>
+  <script>window.dispatchEvent(new Event('renderDoneEvent'));</script>
+  <p>2</p>
+@end
