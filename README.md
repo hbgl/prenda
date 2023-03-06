@@ -1,5 +1,7 @@
 # Prenda - your webpage prerenderer
 
+**⚠️ This package is still under development.**
+
 Prenda is a service application that you can use to prerender webpages into HTML using headless Chrome. It exposes an HTTP API to which you can send your prerender requests. It opens the requested page in a new Chrome tab, waits for it to load, and returns the HTML equivalent of the current DOM. It is perfectly suited for serving prerendered SPAs to web crawlers like Googlebot for better SEO without having to deal with server side rendering (SSR).
 
 ## Installation
