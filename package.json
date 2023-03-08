@@ -1,17 +1,21 @@
 {
   "name": "prenda",
   "version": "1.0.0",
-  "description": "",
+  "description": "A local service for prerendering web pages.",
   "type": "module",
   "scripts": {
     "test": "ts-node-esm src/test/main.ts",
     "test:ava": "ava --timeout=15s --verbose --node-arguments '--trace-warnings'",
     "test-server": "ts-node-esm src/test-server/main.ts",
     "test-server:build": "vite build src/test-server --mode development",
-    "app": "ts-node-esm src/app/main.ts"
+    "app": "ts-node-esm src/app/main.ts",
+    "build": "ts-node-esm build.ts"
   },
-  "author": "",
-  "license": "ISC",
+  "bin": {
+    "prenda": "./app/main.js"
+  },
+  "author": "hbgl <gohbgl@gmail.com> (https://hbgl.dev/)",
+  "license": "MIT",
   "devDependencies": {
     "@ava/get-port": "^2.0.0",
     "@fastify/static": "^6.6.0",
@@ -33,6 +37,7 @@
     "find-process": "^1.4.7",
     "glob": "^8.0.3",
     "prettier": "^2.8.1",
+    "rimraf": "^4.3.1",
     "selfsigned": "^2.1.1",
     "ts-essentials": "^9.3.0",
     "ts-node": "^10.9.1",

@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { fastify as Fastify, FastifyInstance } from 'fastify';
 import { setupErrorHandler } from './error.js';
 import { setupRender } from './render.js';
