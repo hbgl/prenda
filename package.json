@@ -4,6 +4,7 @@
   "description": "A local service for prerendering web pages.",
   "type": "module",
   "homepage": "https://github.com/hbgl/prenda",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/hbgl/prenda.git"
