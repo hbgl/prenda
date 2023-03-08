@@ -3,6 +3,11 @@
   "version": "1.0.0-beta.0",
   "description": "A local service for prerendering web pages.",
   "type": "module",
+  "homepage": "https://github.com/hbgl/prenda",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/hbgl/prenda.git"
+  },
   "scripts": {
     "test": "ts-node-esm src/test/main.ts",
     "test:ava": "ava --timeout=15s --verbose --node-arguments '--trace-warnings'",
