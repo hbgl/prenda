@@ -1,6 +1,6 @@
 {
   "name": "prenda",
-  "version": "1.0.0-beta.0",
+  "version": "1.0.0-beta.1",
   "description": "A local service for prerendering web pages.",
   "type": "module",
   "homepage": "https://github.com/hbgl/prenda",
