@@ -55,9 +55,7 @@ Response:
 
 The Prenda service can be configured using a YAML config file. By default the application will look for `config.yaml` in the working directory. Alternatively a configuration file can be specified via command line option `--config path/to/config/file.yaml`. An example configuration file is provided with installation.
 
-///
-It either manages its own headless chrome process or connects to an external chrome instance like [browserless.io](https://www.browserless.io/) or the [browserless docker container](https://hub.docker.com/r/browserless/chrome) or your own custom setup.
-
 ## TODOs
 
 - Some tests are not 100% deterministic because of the use of `getPort`.
+- Missing documentation for config options.
