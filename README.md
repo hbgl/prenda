@@ -57,6 +57,27 @@ Response:
 
 The Prenda service can be configured using a YAML config file. By default the application will look for `config.yaml` in the working directory. Alternatively a configuration file can be specified via command line option `--config path/to/config/file.yaml`. An example configuration file is provided with installation.
 
+## Why do we need another prerendering tool?
+
+We already have [prerender](https://github.com/prerender/prerender). So why do we need Prenda?
+
+Well, there are two main advantages that Prenda brings to the table:
+
+### 1. Minimal downtime headless Chrome
+
+In its default configuration, Prenda manages a main and failover instance of headless Chrome in the background. The main instance is the one that receives all render requests. Should it crash, then the failover will immediately take over. This also means that the main instance can be periodically restarted with zero downtime and without dropping any requests.
+
+### 2. Deterministic renders
+
+When prerendering a page, Prenda needs to receive a signal to know when the page is loaded. For example, Prenda can be configured to listen to a specific event that you can dispatch from within your JavaScript code like so:
+
+```js
+window.dispatchEvent(new Event("Hey Prenda, the page is now loaded."));
+console.log("Before this is printed, Prenda has already captured the DOM.");
+```
+
+Right when the event is dispatched, Prenda will **synchronously** capture the current DOM and return it to the caller as HTML. There is no time window for other code to modify the DOM in between. This feature may not be useful for everyone but it's nice to have some guarantees.
+
 ## TODOs
 
 - Some tests are not 100% deterministic because of the use of `getPort`.
