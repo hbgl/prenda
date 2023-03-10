@@ -95,7 +95,6 @@ Right when the event is dispatched, Prenda will **synchronously** capture the cu
 ## TODOs
 
 - Some tests are not 100% deterministic because of the use of `getPort`.
-- Missing documentation for config options.
 
 ## License
 
