@@ -1,24 +1,100 @@
 # Prenda configuration file.
 
 app:
+  ### The port that the service will listen on for render requests.
   port: 8585
+
+  ### The host name that the service will listen on for render requests.
   host: localhost
+
+  ### The logging level. Possible values: fatal, error, warn, info, debug, trace, silent.
   logLevel: info
-# browser:
-#   provider:
-#     type: internal
-#     debuggingPort1: 9222
-#     debuggingPort2: 9223
-#     recycleDrainMillis: 60000
-#     autoRecycleEnabled: true
-#     autoRecycleAfterUptimeMillis: 1800000
-#     autoRecycleRetryAfterMillis: 10000
-#   width: 1920
-#   height: 1080
-# render:
-#   pageLoadTimeoutMillis: 10000
-#   allowPartiaLoad: false
-#   freshBrowserContext: false
-#   completionTrigger:
-#     type: requests
-#     waitAfterLastRequestMillis: 2000
+
+  # browser:
+    ### The screen width and browser window width.
+    # width: 1920
+
+    ### The screen height and browser window height.
+    # height: 1080
+
+    ### The internal provider manages a main and standby instance of headless
+    ### Chrome on the local machine. Therefore two remote debugging ports need
+    ### to be specified; one for each instance.
+    provider:
+      type: internal
+      # debuggingPort1: 9222
+      # debuggingPort2: 9223
+
+      ### If true, the main instance will periodically get restarted.
+      # autoRecycleEnabled: true
+
+      ### Recycle the main instance after the specified number of milliseconds.
+      # autoRecycleAfterUptimeMillis: 1800000
+
+      ### Retry to recycle the main after specified number of milliseconds
+      ### (e.g. when standby is unavailable).
+      # autoRecycleRetryAfterMillis: 10000
+
+      ### Wait specified number of milliseconds for requests to drain before instance
+      ### is recycled. When exceeded, the remaining pending requests will get aborted.
+      # recycleDrainMillis: 60000
+
+    ### Connect to an already running headless chrome instance using a static debugging URL.
+    # provider:
+      # type: external_static_url
+      # staticDebuggerUrl: wss://your-debugging-url
+
+    ### Connect to an already running headless chrome instance using host and port.
+    # provider:
+      # type: external_host_port
+      # host: localhost;
+      # port: 9222;
+      # secure: true;
+      
+      
+render:
+  ### The maximum time a page is allowed to load. If exceeded, an error is returned
+  ### unless `allowPartialLoad` is set to `true`.
+  # pageLoadTimeoutMillis: 10000
+
+  ### If set to true, the HTML content of the page will be returned even if the page
+  ### load timeout is exceeded.
+  # allowPartiaLoad: false
+
+  ### If true, create a fresh browser context, otherwise use the global context. Browser
+  ### contexts are similar to incognito tabs but there can be more than one. This also
+  ### disables the caching of assets across multiple renders.
+  ### For more information see:
+  ### https://chromedevtools.github.io/devtools-protocol/tot/Target/#method-createBrowserContext
+  # freshBrowserContext: true
+
+  ### A custom JavaScript script that is evaluated in every frame of the page upon creation
+  ### before any of the frame's own scripts are loaded. This also means that the script will
+  ### be loaded in any iframes that are embedded on the page.
+  ### For more information see:
+  ### https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-addScriptToEvaluateOnNewDocument
+  # scriptToEvaluateOnNewDocument: console.log(123);
+
+  ### Checks the The HTTP status codes of the initial request (not including redirects).
+  ### If the code does not fall in this range, an error is returned. By default, all codes
+  ### are considered valid.
+  # expectedStatusCodes: null
+
+  ### Considers the page loaded when there are no new web requests being made.
+  completionTrigger:
+    type: requests
+    waitAfterLastRequestMillis: 2000
+  
+  ### Considers the page loaded when a variable is set to `true`. Before any scripts of the
+  ### page are run, the variable will already be defined using `Object.defineProperty` on
+  ### the window object.
+  # completionTrigger:
+  #   type: variable
+  #   varName: prerender_done
+
+  ### Considers the page loaded when a certain event is fired.
+  # completionTrigger:
+  #   type: event
+  #   target: window
+  #   eventName: prerender_done
+

@@ -16,7 +16,7 @@ Content-Type: application/json
 |url|string|yes||The URL of the webpage to render.|
 |completionTrigger|CompletionTrigger|no|RequestsCompletionTrigger&nbsp;¹|Specifies the completion trigger that is used to determine when a page should be considered loaded.|
 |pageLoadTimeoutMillis|integer|no|10000&nbsp;¹|The maximum time the page is allowed to load. If exceeded, an error is returned unless `allowPartialLoad` is set to `true`.|
-|allowPartialLoad|boolean|no|false&nbsp;¹|If set to true, the HTML content of the page will be read even if `pageLoadTimeoutMillis` is exceeded.|
+|allowPartialLoad|boolean|no|false&nbsp;¹|If set to true, the HTML content of the page will be read even if the page load timeout is exceeded.|
 |expectedStatusCodes|integer[]|no|null&nbsp;¹|Checks the The HTTP status codes of the initial request (not including redirects). If the code does not fall in this range, an error is returned. By default, all codes are considered valid.|
 |browserWidth|integer|no|1920&nbsp;¹|Overrides the screen width as well as the inner width of the window.|
 |browserHeight|integer|no|1080&nbsp;¹|Overrides the screen height as well as the inner height of the window.|
