@@ -95,6 +95,8 @@ Right when the event is dispatched, Prenda will **synchronously** capture the cu
 ## TODOs
 
 - Some tests are not 100% deterministic because of the use of `getPort`.
+- Get dev environment running under Linux.
+- Fix test web server, it keeps running after tests completed (fork is the problem).
 
 ## License
 
