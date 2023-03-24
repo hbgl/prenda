@@ -11,7 +11,7 @@
   },
   "scripts": {
     "test": "ts-node-esm src/test/main.ts",
-    "test:ava": "ava --timeout=15s --verbose --node-arguments '--trace-warnings'",
+    "test:ava": "ava --verbose",
     "test-server": "ts-node-esm src/test-server/main.ts",
     "test-server:build": "vite build src/test-server --mode development",
     "app": "ts-node-esm src/app/main.ts",
