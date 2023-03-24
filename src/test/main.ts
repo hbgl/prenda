@@ -106,6 +106,8 @@ class TestServer {
       });
 
       await withTimeout(listening, 10000);
+
+      proc.removeAllListeners();
     } finally {
       // Stop showing output once running.
       proc.stdout?.unpipe(process.stdout);
@@ -154,4 +156,6 @@ const configInputSchema: JSONSchemaType<InputConfig> = {
 };
 
 await main();
+
+// This leaks spawned processes on Linux.
 process.exit(0);
