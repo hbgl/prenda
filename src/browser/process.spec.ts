@@ -92,11 +92,14 @@ test("start in 'stopped' event handler", async t => {
   const browserProcess = new BrowserProcess({
     debuggingPort: await getPort(),
   });
-  t.teardown(() => browserProcess.stop());
+  t.teardown(() => {
+    browserProcess.removeAllListeners();
+    return browserProcess.stop();
+  });
 
   const statusRecorder = BrowserProcessStatusRecorder.start(browserProcess);
 
-  const startedInStopped = mapEvent(browserProcess, 'stop', () => browserProcess.start());
+  const startedInStopped = mapEvent(browserProcess, 'stop', async () => browserProcess.start());
 
   await browserProcess.start();
   await browserProcess.stop();
@@ -116,7 +119,10 @@ test('cannot start when faulted', async t => {
   const browserProcess = new BrowserProcess({
     debuggingPort: await getPort(),
   });
-  t.teardown(() => browserProcess.stop());
+  t.teardown(() => {
+    browserProcess.removeAllListeners();
+    return browserProcess.stop();
+  });
 
   const startedInFaulted = mapEvent(browserProcess, 'fault', () => browserProcess.start());
 
@@ -129,7 +135,10 @@ test('cannot start when stopping', async t => {
   const browserProcess = new BrowserProcess({
     debuggingPort: await getPort(),
   });
-  t.teardown(() => browserProcess.stop());
+  t.teardown(() => {
+    browserProcess.removeAllListeners();
+    return browserProcess.stop();
+  });
 
   const startedInFaulted = mapEvent(browserProcess, 'stopping', () => browserProcess.start());
 
@@ -142,7 +151,10 @@ test("stop in 'starting' event handler", async t => {
   const browserProcess = new BrowserProcess({
     debuggingPort: await getPort(),
   });
-  t.teardown(() => browserProcess.stop());
+  t.teardown(() => {
+    browserProcess.removeAllListeners();
+    return browserProcess.stop();
+  });
 
   const statusRecorder = BrowserProcessStatusRecorder.start(browserProcess);
 
@@ -162,7 +174,10 @@ test("stop in 'faulted' event handler", async t => {
   const browserProcess = new BrowserProcess({
     debuggingPort: await getPort(),
   });
-  t.teardown(() => browserProcess.stop());
+  t.teardown(() => {
+    browserProcess.removeAllListeners();
+    return browserProcess.stop();
+  });
 
   const statusRecorder = BrowserProcessStatusRecorder.start(browserProcess);
 
@@ -185,7 +200,10 @@ test("stop in 'stopping' event handler", async t => {
   const browserProcess = new BrowserProcess({
     debuggingPort: await getPort(),
   });
-  t.teardown(() => browserProcess.stop());
+  t.teardown(() => {
+    browserProcess.removeAllListeners();
+    return browserProcess.stop();
+  });
 
   const statusRecorder = BrowserProcessStatusRecorder.start(browserProcess);
 
@@ -313,7 +331,10 @@ test("manual start in 'stopped' event handler before auto restart", async t => {
     autoRestart: true,
     autoRestartDelayMillis: 10,
   });
-  t.teardown(() => browserProcess.stop());
+  t.teardown(() => {
+    browserProcess.removeAllListeners();
+    return browserProcess.stop();
+  });
 
   const statusRecorder = BrowserProcessStatusRecorder.start(browserProcess);
 
@@ -346,7 +367,10 @@ test('manual start after scheduled auto restart', async t => {
     autoRestart: true,
     autoRestartDelayMillis: 10,
   });
-  t.teardown(() => browserProcess.stop());
+  t.teardown(() => {
+    browserProcess.removeAllListeners();
+    return browserProcess.stop();
+  });
 
   const statusRecorder = BrowserProcessStatusRecorder.start(browserProcess);
 
