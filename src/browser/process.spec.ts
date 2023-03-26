@@ -5,7 +5,6 @@ import {
   BrowserProcessEvents,
   BrowserProcessStartReason,
   BrowserProcessStatus,
-  BrowserProcessStopReason,
 } from './process.js';
 import { onEvent } from '../support/promise.js';
 import { killProc, killProcSync, procExists } from '../test/support/process.js';
@@ -20,7 +19,10 @@ test('example', async t => {
   const browserProcess = new BrowserProcess({
     debuggingPort: await getPort(),
   });
-  t.teardown(() => browserProcess.stop());
+  t.teardown(() => {
+    browserProcess.removeAllListeners();
+    return browserProcess.stop();
+  });
 
   t.is(browserProcess.status, BrowserProcessStatus.Initial);
 
@@ -56,7 +58,10 @@ test('cannot start again while starting', async t => {
   const browserProcess = new BrowserProcess({
     debuggingPort: await getPort(),
   });
-  t.teardown(() => browserProcess.stop());
+  t.teardown(() => {
+    browserProcess.removeAllListeners();
+    return browserProcess.stop();
+  });
 
   const first = browserProcess.start();
   const second = browserProcess.start();
@@ -69,7 +74,10 @@ test('stop during start then restart', async t => {
   const browserProcess = new BrowserProcess({
     debuggingPort: await getPort(),
   });
-  t.teardown(() => browserProcess.stop());
+  t.teardown(() => {
+    browserProcess.removeAllListeners();
+    return browserProcess.stop();
+  });
 
   const statusRecorder = BrowserProcessStatusRecorder.start(browserProcess);
 
@@ -225,7 +233,10 @@ test('stop multiple times', async t => {
   const browserProcess = new BrowserProcess({
     debuggingPort: await getPort(),
   });
-  t.teardown(() => browserProcess.stop());
+  t.teardown(() => {
+    browserProcess.removeAllListeners();
+    return browserProcess.stop();
+  });
 
   const statusRecorder = BrowserProcessStatusRecorder.start(browserProcess);
 
@@ -246,7 +257,10 @@ test('fault before CDP client creation', async t => {
     retryStartup: false,
     autoRestart: false,
   });
-  t.teardown(() => browserProcess.stop());
+  t.teardown(() => {
+    browserProcess.removeAllListeners();
+    return browserProcess.stop();
+  });
 
   let faultedEventCalled = false;
 
@@ -262,7 +276,7 @@ test('fault before CDP client creation', async t => {
   t.true(
     browserProcess.status === BrowserProcessStatus.Stopping || browserProcess.status === BrowserProcessStatus.Stopped
   );
-  t.is(browserProcess.stopReason, BrowserProcessStopReason.Faulted);
+  t.is(browserProcess.faulted, true);
   t.true(faultedEventCalled);
 });
 
@@ -272,7 +286,10 @@ test('fault before CDP version query', async t => {
     retryStartup: false,
     autoRestart: false,
   });
-  t.teardown(() => browserProcess.stop());
+  t.teardown(() => {
+    browserProcess.removeAllListeners();
+    return browserProcess.stop();
+  });
 
   const statusRecorder = BrowserProcessStatusRecorder.start(browserProcess);
 
@@ -286,7 +303,7 @@ test('fault before CDP version query', async t => {
   await stopped;
 
   t.is(browserProcess.status, BrowserProcessStatus.Stopped);
-  t.is(browserProcess.stopReason, BrowserProcessStopReason.Faulted);
+  t.is(browserProcess.faulted, true);
   t.deepEqual(statusRecorder.stop(), [
     BrowserProcessStatus.Starting,
     BrowserProcessStatus.Faulted,
@@ -301,7 +318,10 @@ test('auto restart', async t => {
     retryStartup: false,
     autoRestart: true,
   });
-  t.teardown(() => browserProcess.stop());
+  t.teardown(() => {
+    browserProcess.removeAllListeners();
+    return browserProcess.stop();
+  });
 
   const statusRecorder = BrowserProcessStatusRecorder.start(browserProcess);
 
@@ -401,7 +421,10 @@ test('start counter', async t => {
   const browserProcess = new BrowserProcess({
     debuggingPort: await getPort(),
   });
-  t.teardown(() => browserProcess.stop());
+  t.teardown(() => {
+    browserProcess.removeAllListeners();
+    return browserProcess.stop();
+  });
 
   t.is(browserProcess.startCount, 0);
 

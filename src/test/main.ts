@@ -1,4 +1,4 @@
-import { fork, spawn } from 'child_process';
+import { ChildProcess, fork, spawn } from 'child_process';
 import { withTimeout } from '../support/promise.js';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -9,18 +9,19 @@ import { $dirname } from '../support/meta.js';
 import glob from 'glob';
 
 let config: Config;
+let testServer: TestServer;
 
 async function main() {
   config = await readConfig();
 
-  await startTestServer();
-  await runTests();
-}
-
-async function startTestServer() {
   console.log('\nStarting test web server...\n');
-  const testServer = new TestServer();
-  await Promise.all([testServer.start(), shellSpawn('npm run test-server:build', [], { silent: true })]);
+  testServer = new TestServer();
+  try {
+    await testServer.start();
+    await runTests();
+  } finally {
+    testServer.stop();
+  }
 }
 
 async function runTests() {
@@ -83,11 +84,17 @@ function shellSpawn(command: string, args?: readonly string[], options?: { silen
 }
 
 class TestServer {
+  private process: ChildProcess|null = null;
+
+
   public async start() {
+    const buildPromise = shellSpawn('npm run test-server:build', [], { silent: true });
+
     const proc = fork('src/test-server/main.ts', {
       stdio: ['ignore', 'pipe', 'pipe', 'ipc'],
       execArgv: ['--loader=ts-node/esm'],
     });
+    this.process = proc;
 
     // Show output during startup.
     proc.stdout?.pipe(process.stdout);
@@ -105,7 +112,7 @@ class TestServer {
         });
       });
 
-      await withTimeout(listening, 10000);
+      await withTimeout(listening, 15000);
 
       proc.removeAllListeners();
     } finally {
@@ -113,6 +120,17 @@ class TestServer {
       proc.stdout?.unpipe(process.stdout);
       proc.stderr?.unpipe(process.stderr);
     }
+
+    await buildPromise;
+  }
+
+  public stop() {
+    if (this.process === null) {
+      return;
+    }
+    this.process.removeAllListeners();
+    this.process.kill();
+    this.process = null;
   }
 }
 
@@ -156,6 +174,3 @@ const configInputSchema: JSONSchemaType<InputConfig> = {
 };
 
 await main();
-
-// This leaks spawned processes on Linux.
-process.exit(0);

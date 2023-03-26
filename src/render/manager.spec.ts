@@ -25,6 +25,7 @@ test('example', async t => {
         recycleDrainMillis: defaults.browser.provider.internal.recycleDrainMillis,
       }),
   });
+  t.teardown(() => manager.stop());
 
   await manager.start();
 
@@ -39,6 +40,8 @@ test('example', async t => {
     },
     { maxConcurrency: 8 }
   );
+
+  await manager.stop();
 
   for (const result of results) {
     t.is(result.ok, true);

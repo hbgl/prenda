@@ -20,7 +20,6 @@ export class BrowserProcess extends EventEmitter {
   private _process: ChildProcess | null = null;
   private _options: BrowserProcessOptionsInternal;
   private _status = BrowserProcessStatus.Initial;
-  private _stopReason: BrowserProcessStopReason | null = null;
   private _restartTimeout = Timeout.cleared();
   private _browserInfo: BrowserInfo | null = null;
   private _version = BigInt(0);
@@ -28,6 +27,8 @@ export class BrowserProcess extends EventEmitter {
   private _stopReentrancyGuard = new ReentrancyGuard<bigint>();
   private _logger: Logger;
   private _startCounter = 0;
+  private _faulted = false;
+  private _stopRequested = false;
 
   public constructor(options: BrowserProcessOptions) {
     super();
@@ -59,8 +60,12 @@ export class BrowserProcess extends EventEmitter {
     return this._status;
   }
 
-  public get stopReason() {
-    return this._stopReason;
+  public get faulted() {
+    return this._faulted;
+  }
+
+  public get stopRequested() {
+    return this._stopRequested;
   }
 
   public get client() {
@@ -93,7 +98,8 @@ export class BrowserProcess extends EventEmitter {
     }
 
     this._status = BrowserProcessStatus.Starting;
-    this._stopReason = null;
+    this._faulted = false;
+    this._stopRequested = false;
     this._restartTimeout.clear();
     const version = ++this._version;
     this._startCounter++;
@@ -182,6 +188,7 @@ export class BrowserProcess extends EventEmitter {
 
     let version = this._version;
     this._status = BrowserProcessStatus.Faulted;
+    this._faulted = true;
     this.emit('fault', { cause, exitCode });
 
     // Method stop may have been called in 'faulted' event handler.
@@ -193,6 +200,12 @@ export class BrowserProcess extends EventEmitter {
 
     // Process may have been manually started in the 'stopped' event handler.
     if (this._version !== version) {
+      this.emit('__test__:auto-restart-aborted' as any, undefined);
+      return;
+    }
+
+    // Process was manually stopped.
+    if (this._stopRequested) {
       this.emit('__test__:auto-restart-aborted' as any, undefined);
       return;
     }
@@ -223,16 +236,17 @@ export class BrowserProcess extends EventEmitter {
    * process is stopping, it will wait until it is stopped.
    */
   public async stop() {
+    this._stopRequested = true;
     await this.stopImpl({ reason: BrowserProcessStopReason.Requested });
   }
 
   private async stopImpl(args: { reason: BrowserProcessStopReason }) {
+    if (this._status === BrowserProcessStatus.Stopped) {
+      return this._version;
+    }
+
     const { promise, first } = this._stopReentrancyGuard.run(async () => {
-      if (this._status === BrowserProcessStatus.Stopped) {
-        return this._version;
-      }
       this._status = BrowserProcessStatus.Stopping;
-      this._stopReason = args.reason;
       this.emit('stopping', { reason: args.reason });
 
       const process = this._process;
