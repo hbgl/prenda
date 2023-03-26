@@ -95,6 +95,7 @@ Right when the event is dispatched, Prenda will **synchronously** capture the cu
 ## TODOs
 
 - Some tests are not 100% deterministic because of the use of `getPort`.
+- Add tests that detect process leaks.
 
 ## License
 
