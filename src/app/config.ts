@@ -30,7 +30,7 @@ export async function readConfig(configPath: string | false) {
       swaggerEnabled: input.app?.swaggerEnabled ?? defaults.app.swaggerEnabled,
     },
     browser: {
-      provider: makeBrowserPrviderConfig(input),
+      provider: makeBrowserProviderConfig(input),
       userAgent: input.browser?.userAgent ?? undefined,
       width: input.browser?.width ?? defaults.browser.width,
       height: input.browser?.height ?? defaults.browser.height,
@@ -80,7 +80,7 @@ async function parseConfigFile(configPath: string | false): Promise<InputConfig>
   return input;
 }
 
-function makeBrowserPrviderConfig(input: InputConfig): BrowserProviderConfig {
+function makeBrowserProviderConfig(input: InputConfig): BrowserProviderConfig {
   const inputProviderConfig = input.browser?.provider ?? null;
   const type = inputProviderConfig?.type ?? defaults.browser.providerType;
   switch (type) {
