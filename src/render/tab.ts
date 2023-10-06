@@ -137,9 +137,9 @@ class TabRenderer {
         target: targetUrl.toString(),
       });
 
-      const { Page, Network } = this._client;
+      const { Runtime, Page, Network } = this._client;
 
-      await Promise.all([Page.enable(), Network.enable({})]);
+      await Promise.all([Runtime.enable(), Page.enable(), Network.enable({})]);
 
       if (this._options.debug) {
         const { Console } = this._client;
